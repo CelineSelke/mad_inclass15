@@ -22,6 +22,18 @@ class _QuizScreenState extends State<QuizScreen> {
     _loadQuestions();
   }
 
+  void reset(){
+    setState(() {
+      _loadQuestions();
+      _score = 0;
+      _answered = false;
+      _currentQuestionIndex = 0;
+      _selectedAnswer ="";
+      _feedbackText = "";
+
+    });
+  }
+
   Future<void> _loadQuestions() async {
     try {
       final questions = await ApiService.fetchQuestions();
@@ -79,7 +91,11 @@ class _QuizScreenState extends State<QuizScreen> {
       return Scaffold(
         body: Center(
           child:
-              Text('Quiz Finished! Your Score: $_score/${_questions.length}'),
+              Column(mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                Text('Quiz Finished! Your Score: $_score/${_questions.length}'),
+                ElevatedButton(onPressed: reset, style: ElevatedButton.styleFrom(backgroundColor: Colors.blue), child: Text("New Game", style: TextStyle(color: Colors.white)),)
+              ])
         ),
       );
     }
